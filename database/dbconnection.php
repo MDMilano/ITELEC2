@@ -15,7 +15,7 @@
         public function __construct()
         {
             // Check if the server is running on localhost or a specific IP address.
-            if($_SERVER['SERVER_NAME'] === 'localhost' || $_SERVER['SERVER_ADDR'] === '127.0.0.1' || $_SERVER['SERVER_NAME'] === '192.168.1.72'){
+            if($_SERVER['SERVER_NAME'] === 'localhost' || $_SERVER['SERVER_ADDR'] === '127.0.0.1' || $_SERVER['SERVER_ADDR'] === '192.168.1.72'){
                 // Set database connection details for the local environment.
                 $this->host = "localhost";
                 $this->db_name = "itelec2";
