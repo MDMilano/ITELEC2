@@ -45,6 +45,10 @@ class ADMIN
 
         // Hash the password using MD5 for storage in the database.
         $hash_password = md5($password);
+        
+        /* // Hash the password using password_hash for storage in the database.
+        $hash_password = password_hash($password, PASSWORD_DEFAULT);
+        */
 
         // Prepare a query to insert the new admin user into the database.
         $stmt = $this->runQuery("INSERT INTO user (username, email, password) VALUES (:username, :email, :password)");
@@ -70,6 +74,19 @@ class ADMIN
     public function adminSignin($email, $password, $csrf_token)
     {
         try{
+            /* 
+            if(isset($_SESSION['adminSession'])){
+                // If the admin session is already set, redirect to the homepage.
+                echo "<script>alert('User must sign out first!'); window.location.href='../';</script>";
+                exit;
+            }
+
+            if(empty($email) || empty($password)){
+                // If the email or password is empty, display an alert and redirect to the homepage.
+                echo "<script>alert('Please fill in all fields!'); window.location.href='../../../';</script>";
+                exit;
+            } */
+
             // Check if the CSRF token is valid.
             if(!isset($csrf_token) || !hash_equals($_SESSION['csrf_token'], $csrf_token)){
                 // If the CSRF token is invalid, display an alert and redirect to the homepage.
@@ -105,6 +122,27 @@ class ADMIN
                 exit;
             }
 
+            /* 
+            // Check if the user exists and the password matches.
+            if($stmt->rowCount() == 1 && password_verify($password, $userRow['password'])){
+                // Log the successful sign-in activity.
+                $activity = "Has Successfully signed in";
+                $user_id = $userRow['id'];
+                $this->logs($activity, $user_id);
+
+                // Store the user ID in the session to indicate the user is logged in.
+                $_SESSION['adminSession'] = $user_id;
+
+                // Display a welcome alert and redirect to the admin dashboard.
+                echo "<script>alert('Welcome!'); window.location.href='../';</script>";
+                exit;
+            }else{
+                // If the credentials are invalid, display an alert and redirect to the homepage.
+                echo "<script>alert('Invalid Credentials!'); window.location.href='../../../';</script>";
+                exit;
+            }
+            */
+            
         }catch(PDOException $ex){
             // Catch any database errors and display the error message.
             echo $ex->getMessage();
@@ -113,7 +151,12 @@ class ADMIN
     
     // Method to handle admin sign-out.
     public function adminSignout()
-    {
+    {   
+        /* // Log the successful signed out activity.
+        $activity = "Has Successfully signed out";
+        $user_id = $_SESSION['adminSession']; // Retrieve the user ID from the session.
+        $this->logs($activity, $user_id); */
+
         // Unset the admin session to log the user out.
         unset($_SESSION['adminSession']);
         // Display a sign-out success alert and redirect to the homepage.
@@ -146,7 +189,7 @@ class ADMIN
     public function redirect()
     {
         // Display an alert and redirect to the homepage.
-        echo "<script>alert('Admin must logged in first!'); window.location.href='../../../';</script>";
+        echo "<script>alert('Admin must logged in first!'); window.location.href='../../';</script>";
         exit;
     }
 
