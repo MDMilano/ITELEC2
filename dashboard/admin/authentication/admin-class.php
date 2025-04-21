@@ -80,7 +80,7 @@ class ADMIN
                 echo "<script>alert('User must sign out first!'); window.location.href='../';</script>";
                 exit;
             }
-
+            
             if(empty($email) || empty($password)){
                 // If the email or password is empty, display an alert and redirect to the homepage.
                 echo "<script>alert('Please fill in all fields!'); window.location.href='../../../';</script>";
@@ -152,10 +152,10 @@ class ADMIN
     // Method to handle admin sign-out.
     public function adminSignout()
     {   
-        /* // Log the successful signed out activity.
+        // Log the successful signed out activity.
         $activity = "Has Successfully signed out";
         $user_id = $_SESSION['adminSession']; // Retrieve the user ID from the session.
-        $this->logs($activity, $user_id); */
+        $this->logs($activity, $user_id);
 
         // Unset the admin session to log the user out.
         unset($_SESSION['adminSession']);
@@ -233,4 +233,5 @@ if(isset($_GET['admin_signout'])){
     $adminSignout = new ADMIN();
     $adminSignout->adminSignout();
 }
+    
 ?>
