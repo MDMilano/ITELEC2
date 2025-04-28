@@ -1,237 +1,424 @@
 <?php
-// Include the database connection file.
 require_once __DIR__ . '/../../../database/dbconnection.php';
-// Include the settings configuration file.
 include_once __DIR__ . '/../../../config/settings-configuration.php';
+require_once __DIR__ . '/../../../src/vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
-// Define the ADMIN class to handle admin-related operations.
 class ADMIN
 {
-    // Declare a private property to hold the database connection.
     private $conn;
+    private $settings;
+    private $smtp_email;
+    private $smtp_password;
 
-    // Constructor method to initialize the database connection.
     public function __construct()
     {
-        // Create a new instance of the Database class.
+        $this->settings = new SystemConfig();
+        $this->smtp_email = $this->settings->getSmtpEmail();
+        $this->smtp_password = $this->settings->getSmtpPassword();
+
         $database = new Database();
-        // Establish a database connection and assign it to the $conn property.
         $this->conn =  $database->dbConnection();
     }
 
-    // Method to add a new admin user.
+    public function sendOtp($otp, $email){
+        if ($email == NULL){
+            echo "<script>alert('No email found'); window.location.href='../../../';</script>";
+            exit;
+        }else{
+            $stmt = $this->runQuery("SELECT * FROM user WHERE email =:email");
+            $stmt->execute(array(":email" => $email));
+            $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($stmt->rowCount() > 0){
+                echo "<script>alert('Email already taken. Please try another one.'); window.location.href='../../../';</script>";
+                exit;
+            }else{
+                $_SESSION['OTP'] = $otp;
+
+                $subject = "OTP VERIFICATION";
+                $message = "
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>OTP VERIFICATION</title>
+                    <style>
+                        body {
+                            font-family: Arial, Helvetica, sans-serif;
+                            background-color: #f5f5f5;
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        .container{
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 30px;
+                            background-color: #ffffff;
+                            border-radius: 4px;
+                            box-shadow: 0 2 px 4px rgba(0, 0, 0, 0.1);
+                        }
+
+                        h1 {
+                            color: #333333;
+                            font-size: 24px;
+                            margin-bottom: 20px;
+                        }
+
+                        p {
+                            color: #666666;
+                            font-size: 16px;
+                            margin-bottom: 10px;
+                        }
+
+                        button {
+                            display: inline-block;
+                            padding: 12px 24px;
+                            background-color: #0088cc;
+                            color: #ffffff;
+                            text-decoration: none;
+                            border-radius: 4px;
+                            font-size: 16px;
+                            margin-top: 20px;
+                        }
+
+                        .logo {
+                            display: block;
+                            text-align: center;
+                            margin-bottom: 30px;
+                        }
+                    </style>
+                </head>
+                <body>
+                        <div class='container'>
+                            <div class='logo'>
+                                <img src='cid:logo' alt='logo' width='150'>
+                            </div>
+                            <h1>OTP VERIFICATION</h1>
+                            <p>Hello, $email</p>
+                            <p>Your OTP is: $otp</p>
+                            <p>If you didn't request an OTP, please ignore this email.</p>
+                            <p>Thank you!</p>
+                        </div>
+                </body>
+                </html>";
+
+                $this->send_email($email, $message, $subject, $this->smtp_email, $this->smtp_password);
+                echo "<script>alert('We sent the OTP to $email'); window.location.href='../../../verify-otp.php';</script>";
+            }
+        }
+    }
+
+    public function verifyOTP($username, $email, $password, $tokencode, $otp, $csrf_token){
+        if($otp == $_SESSION['OTP']){
+            unset($_SESSION['OTP']);
+
+            $this->addAdmin($csrf_token, $username, $email, $password);
+
+            $subject = "VERIFICATION SUCCESS";
+            $message = "
+            <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>VERIFICATION SUCCESS</title>
+                <style>
+                    body {
+                        font-family: Arial, Helvetica, sans-serif;
+                        background-color: #f5f5f5;
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    .container{
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 30px;
+                        background-color: #ffffff;
+                        border-radius: 4px;
+                        box-shadow: 0 2 px 4px rgba(0, 0, 0, 0.1);
+                    }
+
+                    h1 {
+                        color: #333333;
+                        font-size: 24px;
+                        margin-bottom: 20px;
+                    }
+
+                    p {
+                        color: #666666;
+                        font-size: 16px;
+                        margin-bottom: 10px;
+                    }
+
+                    button {
+                        display: inline-block;
+                        padding: 12px 24px;
+                        background-color: #0088cc;
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 4px;
+                        font-size: 16px;
+                        margin-top: 20px;
+                    }
+
+                    .logo {
+                        display: block;
+                        text-align: center;
+                        margin-bottom: 30px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='logo'>
+                        <img src='cid:logo' alt='logo' width='150'>
+                    </div>
+                    <h1>Welcome</h1>
+                    <p>Hello, <strong>$email</strong></strong></p>
+                    <p>Welcome to Marc System</p>
+                    <p>If you did not sign up for an account, you can safely ignore this email.</p>
+                    <p>Thank you!</p>
+                </div>
+            </body>
+            </html>";
+
+            $this->send_email($email, $message, $subject, $this->smtp_email, $this->smtp_password);
+            echo "<script>alert('Thank You'); window.location.href='../../../';</script>";
+
+            unset($_SESSION['verify_not_username']);
+            unset($_SESSION['verify_not_email']);
+            unset($_SESSION['verify_not_password']);
+        }else if ($otp == NULL){
+            echo "<script>alert('No OTP Found'); window.location.href='../../../verify-otp.php';</script>";
+            exit;
+        }else{
+            echo "<script>alert('It appears that the OTP you entered is invalid'); window.location.href='../../../verify-otp.php';</script>";
+            exit;
+        }
+    }
+
     public function addAdmin($csrf_token, $username, $email, $password)
     {
-        // Prepare a query to check if the email already exists in the database.
-        $stmt = $this->conn->prepare("SELECT * FROM user WHERE email =:email");
-        // Execute the query with the provided email.
+        $stmt = $this->runQuery("SELECT * FROM user WHERE email =:email");
         $stmt->execute(array(":email" => $email));
 
-        // If the email already exists, display an alert and redirect to the homepage.
         if($stmt->rowCount() > 0){
             echo "<script>alert('Email already exists!'); window.location.href='../../../';</script>";
             exit;
         }
 
-        // Check if the CSRF token is valid.
         if(!isset($csrf_token) || !hash_equals($_SESSION['csrf_token'], $csrf_token)){
-            // If the CSRF token is invalid, display an alert and redirect to the homepage.
             echo "<script>alert('Invalid CSRF Token!'); window.location.href='../../../';</script>";
             exit;
         }
 
-        // Unset the CSRF token from the session after validation.
         unset($_SESSION['csrf_token']);
 
-        // Hash the password using MD5 for storage in the database.
         $hash_password = md5($password);
         
-        /* // Hash the password using password_hash for storage in the database.
-        $hash_password = password_hash($password, PASSWORD_DEFAULT);
-        */
+        // $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Prepare a query to insert the new admin user into the database.
         $stmt = $this->runQuery("INSERT INTO user (username, email, password) VALUES (:username, :email, :password)");
-        // Execute the query with the provided username, email, and hashed password.
         $exec = $stmt->execute(array(
             ":username" => $username,
             ":email" => $email,
             ":password" => $hash_password
         ));
 
-        // If the query is successful, display a success alert and redirect to the homepage.
         if($exec){
-            echo "<script>alert('Admin Added Successfully!'); window.location.href='../../../';</script>";
-            exit;
+            echo "<script>alert('Admin Added Successfully!');</script>";
         } else {
-            // If the query fails, display an error alert and redirect to the homepage.
             echo "<script>alert('Error Adding Admin!'); window.location.href='../../../';</script>";
             exit;
         }
     }
 
-    // Method to handle admin sign-in.
     public function adminSignin($email, $password, $csrf_token)
     {
         try{
-            /* 
-            if(isset($_SESSION['adminSession'])){
-                // If the admin session is already set, redirect to the homepage.
-                echo "<script>alert('User must sign out first!'); window.location.href='../';</script>";
-                exit;
-            }
             
-            if(empty($email) || empty($password)){
-                // If the email or password is empty, display an alert and redirect to the homepage.
-                echo "<script>alert('Please fill in all fields!'); window.location.href='../../../';</script>";
-                exit;
-            } */
+            // if(isset($_SESSION['adminSession'])){
+            //     echo "<script>alert('User must sign out first!'); window.location.href='../';</script>";
+            //     exit;
+            // }
+            
+            // if(empty($email) || empty($password)){
+            //     echo "<script>alert('Please fill in all fields!'); window.location.href='../../../';</script>";
+            //     exit;
+            // }
 
-            // Check if the CSRF token is valid.
             if(!isset($csrf_token) || !hash_equals($_SESSION['csrf_token'], $csrf_token)){
-                // If the CSRF token is invalid, display an alert and redirect to the homepage.
                 echo "<script>alert('Invalid CSRF Token!'); window.location.href='../../../';</script>";
                 exit;
             }
-            // Unset the CSRF token from the session after validation.
+
             unset($_SESSION['csrf_token']);
 
-            // Prepare a query to fetch the user with the provided email.
-            $stmt = $this->conn->prepare("SELECT * FROM user WHERE email = :email");
-            // Execute the query with the provided email.
-            $stmt->execute(array(":email" => $email));
-            // Fetch the user data as an associative array.
+            $stmt = $this->runQuery("SELECT * FROM user WHERE email = :email AND status = :status");
+            $stmt->execute(array(":email" => $email, ":status" => "active"));
             $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Check if the user exists and the password matches.
-            if($stmt->rowCount() == 1 && $userRow['password'] == md5($password)){
-                // Log the successful sign-in activity.
-                $activity = "Has Successfully signed in";
-                $user_id = $userRow['id'];
-                $this->logs($activity, $user_id);
+            if($stmt->rowCount() == 1){
+                if($userRow['status'] == 'active'){
+                    if($userRow['password'] == md5($password)){
+                        $activity = "Has Successfully signed in";
+                        $user_id = $userRow['id'];
+                        $this->logs($activity, $user_id);
 
-                // Store the user ID in the session to indicate the user is logged in.
-                $_SESSION['adminSession'] = $user_id;
+                        $_SESSION['adminSession'] = $user_id;
 
-                // Display a welcome alert and redirect to the admin dashboard.
-                echo "<script>alert('Welcome!'); window.location.href='../';</script>";
-                exit;
+                        echo "<script>alert('Welcome!'); window.location.href='../';</script>";
+                        exit;
+                    }else{
+                        echo "<script>alert('Password is incorrect'); window.location.href='../../../';</script>";
+                        exit;
+                    }
+                }else{
+                    echo "<script>alert('Entered email is not verify'); window.location.href='../../../';</script>";
+                    exit;
+                }
             }else{
-                // If the credentials are invalid, display an alert and redirect to the homepage.
-                echo "<script>alert('Invalid Credentials!'); window.location.href='../../../';</script>";
+                echo "<script>alert('No account found'); window.location.href='../../../';</script>";
                 exit;
             }
 
-            /* 
-            // Check if the user exists and the password matches.
-            if($stmt->rowCount() == 1 && password_verify($password, $userRow['password'])){
-                // Log the successful sign-in activity.
-                $activity = "Has Successfully signed in";
-                $user_id = $userRow['id'];
-                $this->logs($activity, $user_id);
+            // if($stmt->rowCount() == 1 && $userRow['password'] == md5($password)){
+            //     $activity = "Has Successfully signed in";
+            //     $user_id = $userRow['id'];
+            //     $this->logs($activity, $user_id);
 
-                // Store the user ID in the session to indicate the user is logged in.
-                $_SESSION['adminSession'] = $user_id;
+            //     $_SESSION['adminSession'] = $user_id;
 
-                // Display a welcome alert and redirect to the admin dashboard.
-                echo "<script>alert('Welcome!'); window.location.href='../';</script>";
-                exit;
-            }else{
-                // If the credentials are invalid, display an alert and redirect to the homepage.
-                echo "<script>alert('Invalid Credentials!'); window.location.href='../../../';</script>";
-                exit;
-            }
-            */
+            //     echo "<script>alert('Welcome!'); window.location.href='../';</script>";
+            //     exit;
+            // }else{
+            //     echo "<script>alert('Invalid Credentials!'); window.location.href='../../../';</script>";
+            //     exit;
+            // }
+
+
+            // if($stmt->rowCount() == 1 && password_verify($password, $userRow['password'])){
+            //     $activity = "Has Successfully signed in";
+            //     $user_id = $userRow['id'];
+            //     $this->logs($activity, $user_id);
+
+            //     $_SESSION['adminSession'] = $user_id;
+
+            //     echo "<script>alert('Welcome!'); window.location.href='../';</script>";
+            //     exit;
+            // }else{
+            //     echo "<script>alert('Invalid Credentials!'); window.location.href='../../../';</script>";
+            //     exit;
+            // }
+            
             
         }catch(PDOException $ex){
-            // Catch any database errors and display the error message.
             echo $ex->getMessage();
         }
     }
     
-    // Method to handle admin sign-out.
+
     public function adminSignout()
     {   
-        // Log the successful signed out activity.
+
         $activity = "Has Successfully signed out";
-        $user_id = $_SESSION['adminSession']; // Retrieve the user ID from the session.
+        $user_id = $_SESSION['adminSession'];
         $this->logs($activity, $user_id);
 
-        // Unset the admin session to log the user out.
         unset($_SESSION['adminSession']);
-        // Display a sign-out success alert and redirect to the homepage.
+
         echo "<script>alert('Sign Out Successfully!'); window.location.href='../../../';</script>";
         exit;
     }
 
-    // Method to log admin activities.
+    function send_email($email, $message, $subject, $smtp_email, $smtp_password){
+        $mail = new PHPMailer();
+        $mail->isSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = "tls";
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = 587;
+        $mail->addAddress($email);
+        $mail->Username = $smtp_email;
+        $mail->Password = $smtp_password;
+        $mail->setFrom($smtp_email, "Marc");
+        $mail->Subject = $subject;
+        $mail->msgHTML($message);
+        $mail->Send();
+    }
+
     public function logs($activity, $user_id)
     {
-        // Prepare a query to insert the activity log into the database.
         $stmt = $this->conn->prepare("INSERT INTO logs (user_id, activity) VALUES (:user_id, :activity)");
-        // Execute the query with the provided user ID and activity description.
         $stmt->execute(array(
             ":user_id" => $user_id,
             ":activity" => $activity
         ));
     }
 
-    // Method to check if an admin user is logged in.
     public function isUserLoggedIn()
     {
-        // Return true if the admin session is set.
         if(isset($_SESSION['adminSession'])){
             return true;
         }
     }
 
-    // Method to redirect users who are not logged in.
     public function redirect()
     {
-        // Display an alert and redirect to the homepage.
         echo "<script>alert('Admin must logged in first!'); window.location.href='../../';</script>";
         exit;
     }
 
-    // Method to prepare and return a database query.
     public function runQuery($sql)
     {
-        // Prepare the SQL query using the database connection.
         $stmt = $this->conn->prepare($sql);
         return $stmt;
     }
 }
 
-// Check if the sign-up button is clicked.
 if(isset($_POST['btn-signup'])){
-    // Retrieve and sanitize the input values.
-    $csrf_token = trim($_POST['csrf_token']);
-    $username = trim($_POST['username']);
+    $_SESSION["not_verify_username"] = trim($_POST['username']);
+    $_SESSION["not_verify_email"] = trim($_POST['email']);
+    $_SESSION["not_verify_password"] = trim($_POST['password']);  
+    
     $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
+    $otp = rand(100000, 999999);
 
-    // Create a new instance of the ADMIN class and call the addAdmin method.
     $addAdmin = new ADMIN();
-    $addAdmin->addAdmin($csrf_token, $username, $email, $password);
+    $addAdmin->sendOtp($otp, $email);
 }
 
-// Check if the sign-in button is clicked.
+if (isset($_POST['btn-verify'])){
+    $csrf_token = trim($_POST['csrf_token']);
+    $username = $_SESSION["not_verify_username"];
+    $email = $_SESSION["not_verify_email"];
+    $password = $_SESSION["not_verify_password"];
+
+    $tokencode = md5(uniqid(rand()));
+    $otp = trim($_POST['otp']);
+
+    $adminVerify = new ADMIN();
+    $adminVerify->verifyOTP($username, $email, $password, $tokencode, $otp, $csrf_token);
+}
+
 if(isset($_POST['btn-signin'])){
-    // Retrieve and sanitize the input values.
     $csrf_token = trim($_POST['csrf_token']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // Create a new instance of the ADMIN class and call the adminSignin method.
     $adminSignin = new ADMIN();
     $adminSignin->adminSignin($email, $password, $csrf_token);
 }
 
-// Check if the admin sign-out action is triggered.
 if(isset($_GET['admin_signout'])){
-    // Create a new instance of the ADMIN class and call the adminSignout method.
     $adminSignout = new ADMIN();
     $adminSignout->adminSignout();
 }
-    
 ?>

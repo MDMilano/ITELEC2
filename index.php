@@ -1,5 +1,4 @@
 <?php
-    // Include the settings-configuration.php file to initialize session and CSRF token.
     include_once 'config/settings-configuration.php';
 ?>
 
