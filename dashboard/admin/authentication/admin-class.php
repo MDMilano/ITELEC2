@@ -224,11 +224,12 @@ class ADMIN
         
         // $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $this->runQuery("INSERT INTO user (username, email, password) VALUES (:username, :email, :password)");
+        $stmt = $this->runQuery("INSERT INTO user (username, email, password, status) VALUES (:username, :email, :password, :status)");
         $exec = $stmt->execute(array(
             ":username" => $username,
             ":email" => $email,
-            ":password" => $hash_password
+            ":password" => $hash_password,
+            ":status" => "active"
         ));
 
         if($exec){
