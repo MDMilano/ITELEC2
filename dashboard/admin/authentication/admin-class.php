@@ -222,7 +222,7 @@ class ADMIN
 
         $hash_password = md5($password);
         
-        // $hash_password = password_hash($password, PASSWORD_DEFAULT);
+        //$hash_password = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $this->runQuery("INSERT INTO user (username, email, password, status) VALUES (:username, :email, :password, :status)");
         $exec = $stmt->execute(array(
@@ -289,36 +289,29 @@ class ADMIN
                 exit;
             }
 
-            // if($stmt->rowCount() == 1 && $userRow['password'] == md5($password)){
-            //     $activity = "Has Successfully signed in";
-            //     $user_id = $userRow['id'];
-            //     $this->logs($activity, $user_id);
+            // if($stmt->rowCount() == 1){
+            //     if($userRow['status'] == 'active'){
+            //         if(password_verify($password, $userRow['password'])){
+            //             $activity = "Has Successfully signed in";
+            //             $user_id = $userRow['id'];
+            //             $this->logs($activity, $user_id);
 
-            //     $_SESSION['adminSession'] = $user_id;
+            //             $_SESSION['adminSession'] = $user_id;
 
-            //     echo "<script>alert('Welcome!'); window.location.href='../';</script>";
-            //     exit;
+            //             echo "<script>alert('Welcome!'); window.location.href='../';</script>";
+            //             exit;
+            //         }else{
+            //             echo "<script>alert('Password is incorrect'); window.location.href='../../../';</script>";
+            //             exit;
+            //         }
+            //     }else{
+            //         echo "<script>alert('Entered email is not verify'); window.location.href='../../../';</script>";
+            //         exit;
+            //     }
             // }else{
-            //     echo "<script>alert('Invalid Credentials!'); window.location.href='../../../';</script>";
+            //     echo "<script>alert('No account found'); window.location.href='../../../';</script>";
             //     exit;
             // }
-
-
-            // if($stmt->rowCount() == 1 && password_verify($password, $userRow['password'])){
-            //     $activity = "Has Successfully signed in";
-            //     $user_id = $userRow['id'];
-            //     $this->logs($activity, $user_id);
-
-            //     $_SESSION['adminSession'] = $user_id;
-
-            //     echo "<script>alert('Welcome!'); window.location.href='../';</script>";
-            //     exit;
-            // }else{
-            //     echo "<script>alert('Invalid Credentials!'); window.location.href='../../../';</script>";
-            //     exit;
-            // }
-            
-            
         }catch(PDOException $ex){
             echo $ex->getMessage();
         }
