@@ -190,7 +190,6 @@ class ADMIN
             </html>";
 
             $this->send_email($email, $message, $subject, $this->smtp_email, $this->smtp_password);
-            echo "<script>alert('Thank You'); window.location.href='../../../';</script>";
 
             unset($_SESSION['verify_not_username']);
             unset($_SESSION['verify_not_email']);
@@ -235,7 +234,7 @@ class ADMIN
         ));
 
         if($exec){
-            echo "<script>alert('Admin Added Successfully!');</script>";
+            echo "<script>alert('Admin Added Successfully. Thank You!'); window.location.href='../../../';</script>";
         } else {
             echo "<script>alert('Error Adding Admin!'); window.location.href='../../../';</script>";
             exit;
