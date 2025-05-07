@@ -117,7 +117,8 @@ class ADMIN
         if($otp == $_SESSION['OTP']){
             unset($_SESSION['OTP']);
 
-            $this->addAdmin($csrf_token, $username, $email, $password);
+            $status = "active";
+            $this->addAdmin($csrf_token, $username, $email, $password, $status, $tokencode);
 
             $subject = "VERIFICATION SUCCESS";
             $message = "
@@ -203,7 +204,7 @@ class ADMIN
         }
     }
 
-    public function addAdmin($csrf_token, $username, $email, $password)
+    public function addAdmin($csrf_token, $username, $email, $password, $status, $tokencode)
     {
         $stmt = $this->runQuery("SELECT * FROM user WHERE email =:email");
         $stmt->execute(array(":email" => $email));
@@ -224,12 +225,13 @@ class ADMIN
         
         //$hash_password = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $this->runQuery("INSERT INTO user (username, email, password, status) VALUES (:username, :email, :password, :status)");
+        $stmt = $this->runQuery("INSERT INTO user (username, email, password, status, tokencode) VALUES (:username, :email, :password, :status, :tokencode)");
         $exec = $stmt->execute(array(
             ":username" => $username,
             ":email" => $email,
             ":password" => $hash_password,
-            ":status" => "active"
+            ":status" => $status,
+            ":tokencode" => $tokencode
         ));
 
         if($exec){
