@@ -10,8 +10,9 @@
     <title>ITELEC2</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/styles.css">
 </head>
-<body class="bg-light min-vh-100 d-flex align-items-center py-5">
+<body class="custom-bg min-vh-100 d-flex align-items-center py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-5 col-xl-4">
