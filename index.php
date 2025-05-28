@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end mb-3">
-                            <a href="forget-password.php" class="text-decoration-none form-links">Forgot your password?</a>
+                            <a href="forgot-password.php" class="text-decoration-none form-links">Forgot your password?</a>
                         </div>
                         
                         <div class="d-grid mb-3">

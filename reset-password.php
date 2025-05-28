@@ -22,8 +22,9 @@
                     </div>
                     
                     <div class="card-body p-4">
-                        <form action="index.php" method="POST">
+                        <form action="dashboard/admin/authentication/admin-class.php" method="POST">
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                            <input type="hidden" name="token" value="<?php echo $_GET['token'] ?? ''; ?>">
                             
                             <div class="mb-3">
                                 <label for="newPassword" class="form-label">New Password</label>
@@ -44,7 +45,7 @@
                             </div>
                         </form>
                     </div>
-                    
+
                     <div class="card-footer bg-white py-3 text-center">
                         <p class="text-decoration-none form-links">Remember your password? <a class="text-decoration-none form-links" href="index.php">Sign in</a></p>
                     </div>
