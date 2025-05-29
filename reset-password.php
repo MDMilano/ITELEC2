@@ -28,12 +28,10 @@
                             
                             <div class="mb-3">
                                 <label for="newPassword" class="form-label">New Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="newPassword" name="new_password" placeholder="Enter new password" >
-                                </div>
+                                <input type="password" class="form-control" id="newPassword" name="new_password" placeholder="Enter new password" >
                             </div>
                             
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm New Password</label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirm_new_password" placeholder="Confirm new password" >
                             </div>
