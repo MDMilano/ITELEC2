@@ -1,13 +1,12 @@
 <?php
-
 require_once 'authentication/admin-class.php';
-
-$admin = new ADMIN();
 
 if(!isset($_SESSION['adminSession'])){
     echo "<script>alert('Please logged in!'); window.location.href='../../';</script>";
     exit;
 }
+
+$admin = new ADMIN();
 
 $stmt = $admin->runQuery("SELECT * FROM user WHERE id = :id");
 $stmt->execute(array(":id"=>$_SESSION['adminSession']));
