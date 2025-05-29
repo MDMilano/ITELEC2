@@ -1,5 +1,10 @@
 <?php
     include_once 'config/settings-configuration.php';
+
+    if(isset($_SESSION['adminSession'])){
+        header("Location: dashboard/admin/");
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +41,10 @@
                                 </button>
                             </div>
                         </form>
+                    </div>
+
+                    <div class="card-footer bg-white py-3 text-center">
+                        <p class="text-decoration-none form-links">Already have an account? <a class="text-decoration-none form-links" href="index.php">Sign In</a></p>
                     </div>
                 </div>
             </div>

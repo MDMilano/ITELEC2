@@ -1,5 +1,10 @@
 <?php
     include_once 'config/settings-configuration.php';
+
+    if(isset($_SESSION['adminSession'])){
+        header("Location: dashboard/admin/");
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +23,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-4">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white py-3">
-                        <h4 class="card-title text-center mb-0">Reset Your Password</h4>
+                        <h4 class="card-title text-center mb-0">Reset Password</h4>
                     </div>
                     
                     <div class="card-body p-4">
@@ -28,12 +33,12 @@
                             
                             <div class="mb-3">
                                 <label for="newPassword" class="form-label">New Password</label>
-                                <input type="password" class="form-control" id="newPassword" name="new_password" placeholder="Enter new password" >
+                                <input type="password" class="form-control" id="newPassword" name="new_password" placeholder="Enter your new password" >
                             </div>
                             
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirm_new_password" placeholder="Confirm new password" >
+                                <input type="password" class="form-control" id="confirmPassword" name="confirm_new_password" placeholder="Confirm your new password" >
                             </div>
                             
                             <div class="d-grid">

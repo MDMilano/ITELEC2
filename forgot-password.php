@@ -1,5 +1,10 @@
 <?php
     include_once 'config/settings-configuration.php';
+    
+    if(isset($_SESSION['adminSession'])){
+        header("Location: dashboard/admin/");
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +23,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-4">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white py-3">
-                        <h4 class="card-title text-center mb-0">Forgot Your Password?</h4>
+                        <h4 class="card-title text-center mb-0">Forgot Password</h4>
                     </div>
                     
                     <div class="card-body p-4">
@@ -26,13 +31,13 @@
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                             
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="example@gmail.com">
                             </div>
                             
                             <div class="d-grid mt-4">
                                 <button type="submit" class="btn btn-primary py-2" name="btn-forgot-password">
-                                    Submit
+                                    Send Reset Link
                                 </button>
                             </div>
                         </form>
