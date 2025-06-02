@@ -45,65 +45,28 @@ class ADMIN
                 <head>
                     <meta charset='UTF-8'>
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                    <title>OTP VERIFICATION</title>
+                    <title>OTP Verification</title>
                     <style>
-                        body {
-                            font-family: Arial, Helvetica, sans-serif;
-                            background-color: #f5f5f5;
-                            margin: 0;
-                            padding: 0;
-                        }
-
-                        .container{
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 30px;
-                            background-color: #ffffff;
-                            border-radius: 4px;
-                            box-shadow: 0 2 px 4px rgba(0, 0, 0, 0.1);
-                        }
-
-                        h1 {
-                            color: #333333;
-                            font-size: 24px;
-                            margin-bottom: 20px;
-                        }
-
-                        p {
-                            color: #666666;
-                            font-size: 16px;
-                            margin-bottom: 10px;
-                        }
-
-                        button {
-                            display: inline-block;
-                            padding: 12px 24px;
-                            background-color: #0088cc;
-                            color: #ffffff;
-                            text-decoration: none;
-                            border-radius: 4px;
-                            font-size: 16px;
-                            margin-top: 20px;
-                        }
-
-                        .logo {
-                            display: block;
-                            text-align: center;
-                            margin-bottom: 30px;
-                        }
+                        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                        h1 { color: #333; font-size: 24px; margin-bottom: 20px; }
+                        p { color: #666; font-size: 16px; line-height: 1.6; }
+                        .otp-code { background: #f8f9fa; border: 2px dashed #007bff; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; color: #007bff; margin: 20px 0; border-radius: 8px; }
+                        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
                     </style>
                 </head>
                 <body>
-                        <div class='container'>
-                            <div class='logo'>
-                                <img src='cid:logo' alt='logo' width='150'>
-                            </div>
-                            <h1>OTP VERIFICATION</h1>
-                            <p>Hello, $email</p>
-                            <p>Your OTP is: $otp</p>
-                            <p>If you didn't request an OTP, please ignore this email.</p>
-                            <p>Thank you!</p>
+                    <div class='container'>
+                        <h1>OTP Verification - Marc System</h1>
+                        <p>Hello,</p>
+                        <p>You have requested to create an account with Marc System. Please use the following OTP to verify your email address:</p>
+                        <div class='otp-code'>$otp</div>
+                        <div class='warning'>
+                            <strong>Important:</strong> This OTP will expire in 10 minutes. Do not share this code with anyone.
                         </div>
+                        <p>If you didn't request this verification, please ignore this email.</p>
+                        <p>Best regards,<br>Marc System Team</p>
+                    </div>
                 </body>
                 </html>";
 
@@ -127,64 +90,26 @@ class ADMIN
             <head>
                 <meta charset='UTF-8'>
                 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                <title>VERIFICATION SUCCESS</title>
+                <title>Welcome to Marc System</title>
                 <style>
-                    body {
-                        font-family: Arial, Helvetica, sans-serif;
-                        background-color: #f5f5f5;
-                        margin: 0;
-                        padding: 0;
-                    }
-
-                    .container{
-                        max-width: 600px;
-                        margin: 0 auto;
-                        padding: 30px;
-                        background-color: #ffffff;
-                        border-radius: 4px;
-                        box-shadow: 0 2 px 4px rgba(0, 0, 0, 0.1);
-                    }
-
-                    h1 {
-                        color: #333333;
-                        font-size: 24px;
-                        margin-bottom: 20px;
-                    }
-
-                    p {
-                        color: #666666;
-                        font-size: 16px;
-                        margin-bottom: 10px;
-                    }
-
-                    button {
-                        display: inline-block;
-                        padding: 12px 24px;
-                        background-color: #0088cc;
-                        color: #ffffff;
-                        text-decoration: none;
-                        border-radius: 4px;
-                        font-size: 16px;
-                        margin-top: 20px;
-                    }
-
-                    .logo {
-                        display: block;
-                        text-align: center;
-                        margin-bottom: 30px;
-                    }
+                    body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                    h1 { color: #28a745; font-size: 28px; margin-bottom: 20px; }
+                    p { color: #666; font-size: 16px; line-height: 1.6; }
+                    .welcome-box { background: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 8px; margin: 20px 0; }
                 </style>
             </head>
             <body>
                 <div class='container'>
-                    <div class='logo'>
-                        <img src='cid:logo' alt='logo' width='150'>
+                    <h1>Welcome to Marc System!</h1>
+                    <div class='welcome-box'>
+                        <p><strong>Congratulations!</strong> Your account has been successfully created and verified.</p>
                     </div>
-                    <h1>Welcome</h1>
-                    <p>Hello, <strong>$email</strong></strong></p>
-                    <p>Welcome to Marc System</p>
-                    <p>If you did not sign up for an account, you can safely ignore this email.</p>
-                    <p>Thank you!</p>
+                    <p>Hello <strong>" . htmlspecialchars($email) . "</strong>,</p>
+                    <p>Welcome to Marc System! Your account is now active and ready to use.</p>
+                    <p>You can now log in to your account and start using our services.</p>
+                    <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+                    <p>Best regards,<br>Marc System Team</p>
                 </div>
             </body>
             </html>";
@@ -288,8 +213,10 @@ class ADMIN
 
     public function forgotPassword($csrf_token, $email, $token)
     {
-        if(empty($email)){
-            echo "<script>alert('Please enter email!'); window.location.href='../../../forgot-password.php';</script>";
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+        if(empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)){
+            echo "<script>alert('Please enter valid email address!'); window.location.href='../../../forgot-password.php';</script>";
             exit;
         }
 
@@ -321,13 +248,39 @@ class ADMIN
                                 "/ITELEC2/reset-password.php?token=" . $token;
                 
                 $subject = "Password Reset Request";
-                $message = "Hello,<br><br>";
-                $message .= "You have requested to reset your password.<br><br>";
-                $message .= "Please click the following link to reset your password:<br>";
-                $message .= "<a href='" . $reset_link . "'>" . $reset_link . "</a><br><br>";
-                $message .= "This link will expire in 10 minutes.<br><br>";
-                $message .= "If you did not request this password reset, please ignore this email.<br><br>";
-                $message .= "Best regards,<br>Marc";
+                $message = "
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Password Reset Request</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                        h1 { color: #dc3545; font-size: 24px; margin-bottom: 20px; }
+                        p { color: #666; font-size: 16px; line-height: 1.6; }
+                        .reset-button { display: inline-block; padding: 12px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+                        .warning { background: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <h1>Password Reset Request</h1>
+                        <p>Hello,</p>
+                        <p>You have requested to reset your password for your Marc System account.</p>
+                        <p>Click the button below to reset your password:</p>
+                        <a href='$reset_link' class='reset-button'>Reset Password</a>
+                        <div class='warning'>
+                            <strong>Security Notice:</strong> This link will expire in 10 minutes. If you didn't request this password reset, please ignore this email and your password will remain unchanged.
+                        </div>
+                        <p>If the button doesn't work, copy and paste this link into your browser:</p>
+                        <p><a href='$reset_link'>$reset_link</a></p>
+                        <p>Best regards,<br>Marc System Team</p>
+                    </div>
+                </body>
+                </html>";
+                
 
                 $this->send_email($email, $message, $subject, $this->smtp_email, $this->smtp_password);
                 echo "<script>alert('Password reset instructions have been sent to your email.'); window.location.href='../../../';</script>";
@@ -344,7 +297,7 @@ class ADMIN
 
     public function resetPassword($token, $csrf_token, $new_reset_password, $confirm_new_password )
     {
-        if(empty($token)){
+        if(!isset($token) || empty($token)){
             echo "<script>alert('No reset token provided.'); window.location.href='../../../reset-password.php?token=$token';</script>";
             exit;
         }
@@ -398,15 +351,19 @@ class ADMIN
             $update_stmt = $this->runQuery("UPDATE user SET password = :password WHERE email = :email");
             $update_stmt->bindParam(":password", $hashed_password);
             $update_stmt->bindParam(":email", $reset_data['email']);
-            $update_stmt->execute();
             
-            // Delete all reset tokens for this user
-            $delete_stmt = $this->runQuery("DELETE FROM password_resets WHERE email = :email");
-            $delete_stmt->bindParam(":email", $reset_data['email']);
-            $delete_stmt->execute();
+            if($update_stmt->execute()){
+                // Delete all reset tokens for this user
+                $delete_stmt = $this->runQuery("DELETE FROM password_resets WHERE email = :email");
+                $delete_stmt->bindParam(":email", $reset_data['email']);
+                $delete_stmt->execute();
 
-            echo "<script>alert('Password has been reset successfully. You can now login with your new password.'); window.location.href='../../../';</script>";
-            exit;
+                echo "<script>alert('Password has been reset successfully. You can now login with your new password.'); window.location.href='../../../';</script>";
+                exit;
+            }else{
+                echo "<script>alert('Failed to update password. Please try again.'); window.location.href='../../../reset-password.php?token=$token'';</script>";
+                exit;
+            }
         }else{
             // Check if token exists but expired
             $check_query = "SELECT expires_at FROM password_resets WHERE token = :token";
@@ -444,31 +401,47 @@ class ADMIN
         exit;
     }
 
-    private function send_email($email, $message, $subject, $smtp_email, $smtp_password){
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = "tls";
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->addAddress($email);
-        $mail->Username = $smtp_email;
-        $mail->Password = $smtp_password;
-        $mail->setFrom($smtp_email, "Marc");
-        $mail->Subject = $subject;
-        $mail->msgHTML($message);
-        $mail->Send();
+    private function send_email($email, $message, $subject, $smtp_email, $smtp_password)
+    {
+        try {
+            $mail = new PHPMailer();
+            $mail->isSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = "tls";
+            $mail->Host = "smtp.gmail.com";
+            $mail->Port = 587;
+            $mail->addAddress($email);
+            $mail->Username = $smtp_email;
+            $mail->Password = $smtp_password;
+            $mail->setFrom($smtp_email, "Marc");
+            $mail->Subject = $subject;
+            $mail->msgHTML($message);
+            $mail->Send();
+        } catch (Exception $e) {
+            error_log("Email Error: " . $e->getMessage());
+        }
     }
 
     private function logs($activity, $user_id)
     {
-        $stmt = $this->conn->prepare("INSERT INTO logs (user_id, activity) VALUES (:user_id, :activity)");
-        $stmt->execute(array(
-            ":user_id" => $user_id,
-            ":activity" => $activity
-        ));
+        try {
+            $stmt = $this->conn->prepare("INSERT INTO logs (user_id, activity, created_at) VALUES (:user_id, :activity, NOW())");
+            $stmt->execute([
+                ":user_id" => $user_id,
+                ":activity" => $activity
+            ]);
+        } catch (PDOException $e) {
+            error_log("Logging Error: " . $e->getMessage());
+        }
     }
+
+    // private function redirectWithAlert($message, $location)
+    // {
+    //     $safe_message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+    //     echo "<script>alert('$safe_message'); window.location.href='$location';</script>";
+    //     exit;
+    // }
 
     public function runQuery($sql)
     {
@@ -477,62 +450,63 @@ class ADMIN
     }
 }
 
-if(isset($_POST['btn-signup'])){
-    $_SESSION["not_verify_username"] = trim($_POST['username']);
-    $_SESSION["not_verify_email"] = trim($_POST['email']);
-    $_SESSION["not_verify_password"] = trim($_POST['password']);  
-    
-    $email = trim($_POST['email']);
-    $otp = rand(100000, 999999);
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if(isset($_POST['btn-signup'])){
+        $_SESSION["not_verify_username"] = trim($_POST['username']);
+        $_SESSION["not_verify_email"] = trim($_POST['email']);
+        $_SESSION["not_verify_password"] = trim($_POST['password']);  
+        
+        $email = trim($_POST['email']);
+        $otp = rand(100000, 999999);
 
-    $addAdmin = new ADMIN();
-    $addAdmin->sendOtp($otp, $email);
-}
+        $addAdmin = new ADMIN();
+        $addAdmin->sendOtp($otp, $email);
+    }
 
-if (isset($_POST['btn-verify'])){
-    $csrf_token = trim($_POST['csrf_token']);
-    $username = $_SESSION["not_verify_username"];
-    $email = $_SESSION["not_verify_email"];
-    $password = $_SESSION["not_verify_password"];
+    if (isset($_POST['btn-verify'])){
+        $csrf_token = trim($_POST['csrf_token']);
+        $username = $_SESSION["not_verify_username"];
+        $email = $_SESSION["not_verify_email"];
+        $password = $_SESSION["not_verify_password"];
 
-    $otp = trim($_POST['otp']);
+        $otp = trim($_POST['otp']);
 
-    $adminVerify = new ADMIN();
-    $adminVerify->verifyOTP($username, $email, $password, $otp, $csrf_token);
-}
+        $adminVerify = new ADMIN();
+        $adminVerify->verifyOTP($username, $email, $password, $otp, $csrf_token);
+    }
 
-if(isset($_POST['btn-signin'])){
-    $csrf_token = trim($_POST['csrf_token']);
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
+    if(isset($_POST['btn-signin'])){
+        $csrf_token = trim($_POST['csrf_token']);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
 
-    $adminSignin = new ADMIN();
-    $adminSignin->adminSignin($email, $password, $csrf_token);
+        $adminSignin = new ADMIN();
+        $adminSignin->adminSignin($email, $password, $csrf_token);
+    }
+
+    if(isset($_POST['btn-forgot-password'])){
+        $csrf_token = trim($_POST['csrf_token']);
+        $email = trim($_POST['email']);
+
+        $token = md5(uniqid(rand()));
+
+        $forgotPassword = new ADMIN();
+        $forgotPassword->forgotPassword($csrf_token, $email, $token);
+    }
+
+    if(isset($_POST['btn-reset-password'])){
+        $csrf_token = trim($_POST['csrf_token']);
+        $token = trim($_POST['token']);
+        $new_reset_password = trim($_POST['new_password']);
+        $confirm_new_password = trim($_POST['confirm_new_password']);
+
+        $resetPassword = new ADMIN();
+        $resetPassword->resetPassword($token, $csrf_token, $new_reset_password, $confirm_new_password);
+    }
 }
 
 if(isset($_GET['admin_signout'])){
     $adminSignout = new ADMIN();
     $adminSignout->adminSignout();
 }
-
-if(isset($_POST['btn-forgot-password'])){
-    $csrf_token = trim($_POST['csrf_token']);
-    $email = trim($_POST['email']);
-
-    $token = md5(uniqid(rand()));
-
-    $forgotPassword = new ADMIN();
-    $forgotPassword->forgotPassword($csrf_token, $email, $token);
-}
-
-if(isset($_POST['btn-reset-password'])){
-    $csrf_token = trim($_POST['csrf_token']);
-    $token = trim($_POST['token']);
-    $new_reset_password = trim($_POST['new_password']);
-    $confirm_new_password = trim($_POST['confirm_new_password']);
-
-    $resetPassword = new ADMIN();
-    $resetPassword->resetPassword($token, $csrf_token, $new_reset_password, $confirm_new_password);
-}
-
 ?>
