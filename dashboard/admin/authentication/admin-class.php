@@ -387,6 +387,17 @@ class ADMIN
         }
     }
 
+    public function checkToken($token)
+    {
+        $stmt = $this->runQuery("SELECT token FROM password_resets WHERE token = :token;");
+        $stmt->execute([":token" => $token]);
+
+        if($stmt->rowCount() == 0){
+            echo "<script>alert('Reset link is already used.'); window.location.href='http://" . $_SERVER['HTTP_HOST'] . "/ITELEC2/';</script>";
+            exit;
+        }
+    }
+
     public function adminSignout()
     {   
         $activity = "Has Successfully signed out";

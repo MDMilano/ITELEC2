@@ -1,10 +1,10 @@
 <?php
     include_once 'config/settings-configuration.php';
+    require_once 'dashboard/admin/authentication/admin-class.php';
 
-    if(isset($_SESSION['adminSession'])){
-        header("Location: dashboard/admin/");
-        exit;
-    }
+    $admin = new ADMIN();
+    $token = $_GET['token'];
+    $admin->checkToken($token);
 ?>
 
 <!DOCTYPE html>
